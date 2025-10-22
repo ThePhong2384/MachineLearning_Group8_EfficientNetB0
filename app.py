@@ -33,24 +33,17 @@ def prepare_image(uploaded_file):
         img = np.array(image)
         st.write("Shape ảnh gốc:", img.shape)
 
-        # Convert mọi ảnh về RGB 3 kênh
-        if len(img.shape) == 2:  # Grayscale HxW
+       
+        # Luôn đảm bảo ảnh 3 kênh
+        if img.ndim == 2:  # Grayscale HxW
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-            st.write("Sau khi chuyển từ Grayscale: ", img.shape)
         elif img.shape[2] == 1:  # Grayscale HxWx1
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-            st.write("Sau khi chuyển từ HxWx1: ", img.shape)
         elif img.shape[2] == 4:  # RGBA
-            alpha_channel = img[:, :, 3]
-            rgb_channels = img[:, :, :3]
-            white_background = np.ones_like(rgb_channels, dtype=np.uint8) * 255
-            alpha_factor = alpha_channel[:, :, np.newaxis].astype(np.float32) / 255.0
-            alpha_factor = np.concatenate([alpha_factor] * 3, axis=2)
-            img = (rgb_channels.astype(np.float32) * alpha_factor + 
-                   white_background.astype(np.float32) * (1 - alpha_factor)).astype(np.uint8)
-            st.write("Sau khi xử lý RGBA: ", img.shape)
-        else:  # RGB
-            st.write("Ảnh RGB gốc: ", img.shape)
+            img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
+        # Nếu RGB (3 kênh) thì không làm gì
+        st.write("Shape ảnh sau khi chuyển về 3 kênh:", img.shape)
+
 
         # Resize về 224x224
         img_resized = cv2.resize(img, (224, 224))
