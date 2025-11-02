@@ -8,7 +8,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.applications.efficientnet import preprocess_input
 
 #  1. Load mô hình đã huấn luyện
-MODEL_PATH = r"D:\MonhocTrenLOp\hocmay\BaiCuoiKi\best_model.keras"  
+MODEL_PATH = "best_model.keras"  
 @st.cache_resource
 def load_trained_model(model_path):
     model = load_model(model_path)
